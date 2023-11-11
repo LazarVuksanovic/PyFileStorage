@@ -1,0 +1,6 @@
+# base directory for file saving
+directory: fileRegistry
+# number of U/I processes
+uiprocesses: 10
+# Available RAM memory for program (in KB)
+maxmemory: 50
