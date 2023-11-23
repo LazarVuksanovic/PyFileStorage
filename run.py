@@ -143,9 +143,9 @@ def get_write_file():      # rekonstrujisemo trazen fajl preko obradjenih delova
     global usedmem, send, file_registry
     with send_lock:
         decompressed_parts = pool.starmap(get_read_part, send)
-        send = send[len(decompressed_parts):]
+        send = []
     with mem_lock:
-        usedmem -= BYTES_TO_READ * len(decompressed_parts)
+        usedmem = 0
     for dp in decompressed_parts:
         if dp[0] == -1:
             break
@@ -251,7 +251,6 @@ if __name__ == '__main__':      # posmatramo korisnikov unos, pravi se tred koji
             continue
         threads.append(t)
         t.start()
-        time.sleep(0.2)
     for t in threads:       # cekamo da svi tredovi i procesi zavrse sa izvrsavanjem pre nego sto ugasimo program
         t.join()
     pool.close()
