@@ -70,7 +70,8 @@ def put(path, name=None):
         while True:              # cita dok ne dodje do kraja fajla
             if usedmem < maxmem:  # u slucaju da je RAM slobodan, cita blok i zauzima RAM
                 with mem_lock:
-                    usedmem += BYTES_TO_READ
+                    if usedmem < maxmem: # proveravamo jos jednom u slucaju da su dva treda prosla glavni if
+                        usedmem += BYTES_TO_READ
                 block = reader.read(BYTES_TO_READ)
                 if not block:        # u slucaju da je dosao do kraja fajla salje preostale blokove na izradu i zavrsava
                     if read_blocks:
@@ -130,7 +131,8 @@ def get_file(uid):
             with send_lock:
                 send.append((file, part))
             with mem_lock:
-                usedmem += BYTES_TO_READ
+                if usedmem < maxmem: # proveravamo jos jednom u slucaju da su dva treda prosla do ovde
+                    usedmem += BYTES_TO_READ
         if send:
             get_write_file()
     else:
